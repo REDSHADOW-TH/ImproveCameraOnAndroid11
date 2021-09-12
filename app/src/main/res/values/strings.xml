@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">ImproveCameraOnAndroid11</string>
     <string name="open_camera_text">Open Camera</string>
+    <string name="open_camera_from_java_code">open camera from java code</string>
+    <string name="go_to_java_activity">go to java activity</string>
 </resources>

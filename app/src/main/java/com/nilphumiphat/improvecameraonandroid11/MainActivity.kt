@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.nilphumiphat.improvecameraonandroid11.databinding.MainActivityBinding
+import com.nilphumiphat.improvecameraonandroid11.java.JavaCodeActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,17 +23,6 @@ class MainActivity : AppCompatActivity() {
     private val cameraReqId: Int = 55555
 
     private var bitmapData: Bitmap? = null
-
-
-    private val startCameraActivityResult: ActivityResultLauncher<Intent> = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            bitmapData = (it.data?.extras?.get("data") as Bitmap)
-            if (bitmapData != null) binding.imgView.setImageBitmap(bitmapData)
-            saveFileProcess()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +32,21 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnOpenCamera.setOnClickListener {
             openCameraProcess()
+        }
+
+        binding.btnGoJavaCode.setOnClickListener() {
+            startActivity(Intent(this, JavaCodeActivity::class.java))
+        }
+    }
+
+
+    private val startCameraActivityResult: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            bitmapData = (it.data?.extras?.get("data") as Bitmap)
+            if (bitmapData != null) binding.imgView.setImageBitmap(bitmapData)
+            saveFileProcess()
         }
     }
 
