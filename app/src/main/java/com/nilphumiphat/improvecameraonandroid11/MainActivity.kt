@@ -9,6 +9,8 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -18,9 +20,19 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: MainActivityBinding
     private val cameraReqId: Int = 55555
-    private val storageReqId = 5555555
 
     private var bitmapData: Bitmap? = null
+
+
+    private val startCameraActivityResult: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            bitmapData = (it.data?.extras?.get("data") as Bitmap)
+            if (bitmapData != null) binding.imgView.setImageBitmap(bitmapData)
+            saveFileProcess()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,21 +69,11 @@ class MainActivity : AppCompatActivity() {
             return
         }
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, cameraReqId)
+        startCameraActivityResult.launch(cameraIntent)
     }
 
     private fun saveFileProcess() {
         bitmapData?.saveImage(applicationContext)
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == cameraReqId) {
-            bitmapData = (data?.extras?.get("data") as Bitmap)
-            if (bitmapData != null) binding.imgView.setImageBitmap(bitmapData)
-            saveFileProcess()
-        }
     }
 
 

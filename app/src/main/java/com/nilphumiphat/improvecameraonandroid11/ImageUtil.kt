@@ -23,7 +23,7 @@ fun Bitmap.saveImage(context: Context): Uri? {
         values.put(MediaStore.Images.Media.DISPLAY_NAME, "img_${SystemClock.uptimeMillis()}")
 
         val uri: Uri? =
-        context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         if (uri != null) {
             saveImageToStream(this, context.contentResolver.openOutputStream(uri))
             values.put(MediaStore.Images.Media.IS_PENDING, false)
